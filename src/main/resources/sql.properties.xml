@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="queryComplainersPS">
+SELECT orig.name
+FROM users orig, users target, opinions
+WHERE orig.id = opinions.originating_user_id
+AND target.id = opinions.target_user_id
+AND type = '@net.sf.repbot.db.sql.complaint@'
+AND target.name = ?
+ORDER BY orig.name
+	</entry>
+	<entry key="queryVouchersPS">
+SELECT orig.name
+FROM users orig, users target, opinions
+WHERE orig.id = opinions.originating_user_id
+AND target.id = opinions.target_user_id
+AND type = '@net.sf.repbot.db.sql.voucher@'
+AND target.name = ?
+ORDER BY orig.name
+	</entry>
+	<entry key="queryComplaintsPS">
+SELECT target.name
+FROM users AS orig, users AS target, opinions
+WHERE orig.id = opinions.originating_user_id
+AND target.id = opinions.target_user_id
+AND type = '@net.sf.repbot.db.sql.complaint@'
+AND orig.name = ?
+ORDER BY target.name
+	</entry>
+	<entry key="queryVouchesPS">
+SELECT target.name
+FROM users AS orig, users AS target, opinions
+WHERE orig.id = opinions.originating_user_id
+AND target.id = opinions.target_user_id
+AND type = '@net.sf.repbot.db.sql.voucher@'
+AND orig.name = ?
+ORDER BY target.name	
+	</entry>
+<!-- 
+New reputation formula, which allows to assign weights to bot vouches and complaints
+Avi's original reputation formula, which is bot agnostic
+SELECT sum(case when originator_experience &lt; 10000 "
+	THEN originator_experience
+	ELSE 10000
+END
+*
+CASE type
+	when 'V' THEN 1
+	when 'C' THEN -1
+END)
+FROM users, opinions
+WHERE users.id = opinions.target_user_id
+AND name = ?
+-->
+	<entry key="queryReputationPS">
+SELECT ceiling(sum( 
+	CASE WHEN o.originator_experience &lt; @net.sf.repbot.rules.weight.user.max@
+		THEN o.originator_experience
+		ELSE  @net.sf.repbot.rules.weight.user.max@
+	END
+	*
+ 	CASE o.type
+		WHEN '@net.sf.repbot.db.sql.voucher@' THEN 1.0
+		WHEN '@net.sf.repbot.db.sql.complaint@' THEN -1.0
+	END
+	*
+	CASE
+		WHEN (SELECT bot FROM users WHERE users.id = o.originating_user_id)
+			THEN CASE o.type
+				WHEN '@net.sf.repbot.db.sql.voucher@' THEN @net.sf.repbot.rules.weight.bot.voucher@
+				WHEN '@net.sf.repbot.db.sql.complaint@' THEN @net.sf.repbot.rules.weight.bot.complaint@
+			END
+			ELSE 1
+		END
+	))
+FROM users u, opinions o
+WHERE u.id = o.target_user_id AND u.name = ?
+	</entry>
+	<entry key="queryUserPS">
+SELECT id FROM users WHERE name = ?
+	</entry>
+	<entry key="queryFriendsOpinionPS">
+SELECT friends.name, opinions.type
+FROM opinions, users AS friends, opinions AS friendship, users as asker, users AS target
+WHERE asker.name = ?
+AND asker.id = friendship.originating_user_id
+AND friendship.type = '@net.sf.repbot.db.sql.voucher@'
+AND friends.id = friendship.target_user_id
+AND friendship.target_user_id = opinions.originating_user_id
+AND opinions.target_user_id = target.id   
+AND target.name = ?
+ORDER BY friends.name
+	</entry>
+	<entry key="insertUserPS">
+INSERT INTO users (name, news_level, last_verified, last_logout)
+VALUES ( ?, ?, UTC_TIMESTAMP(), UTC_TIMESTAMP() )
+	</entry>
+	<entry key="insertOpinionPS">
+INSERT INTO opinions ( target_user_id, originating_user_id, originator_experience, type )
+SELECT t.id, o.id, ?, ? 
+FROM users AS o, users AS t
+WHERE t.name = ? AND o.name = ?	
+	</entry>
+	<entry key="deleteOpinionPS">
+DELETE opinions
+FROM opinions
+INNER JOIN users u1 ON u1.id = target_user_id       AND u1.name=?
+INNER JOIN users u2 ON u2.id = originating_user_id  AND u2.name=?	
+	</entry>
+	<entry key="queryOpinionPS">
+SELECT type, originator_experience
+FROM opinions AS o, users AS ousers, users AS tusers
+WHERE ousers.name=?
+AND tusers.name=?
+AND o.originating_user_id = ousers.id
+AND o.target_user_id = tusers.id
+	</entry>
+	<entry key="dumpUsersPS">
+SELECT name
+FROM users
+	</entry>
+	<entry key="queryNewsPS">
+SELECT message
+FROM news, users
+WHERE name = ?
+AND news.level > users.news_level
+	</entry>
+	<entry key="updateNewsLevelPS">
+UPDATE users 
+SET news_level = news_level + ?
+WHERE name = ?
+	</entry>
+	<entry key="queryGlobalNewsLevelPS">
+SELECT max(level)
+FROM news
+	</entry>
+	<entry key="insertGlobalNewsPS">
+INSERT INTO news ( level, message )
+VALUES ( ?, ? )
+	</entry>
+	<entry key="queryAlertPS">
+SELECT alert
+FROM users
+WHERE name = ?
+	</entry>
+	<entry key="updateAlertPS">
+UPDATE users
+SET alert = ?
+WHERE name = ?
+	</entry>
+	<entry key="queryLastVerifiedPS">
+SELECT name
+FROM users
+ORDER BY last_verified
+LIMIT 1
+	</entry>
+	<entry key="updateLastVerifiedPS">
+UPDATE users
+SET last_verified = ?
+WHERE name = ?
+	</entry>
+	<entry key="updateLastVerifiedExpLogoutPS">
+UPDATE users 
+SET last_verified = ?, last_experience = ?, last_logout = ?
+WHERE name = ?
+	</entry>
+	<entry key="queryLastLogoutZeroExpPS">
+SELECT name FROM users
+WHERE last_logout IS NOT NULL
+AND last_experience = 0
+ORDER BY last_logout
+LIMIT 1
+	</entry>
+	<entry key="queryLastLogoutNonzeroExpPS">
+SELECT name FROM users
+WHERE last_logout IS NOT NULL
+AND last_experience > 0
+ORDER BY last_logout 
+LIMIT 1
+	</entry>
+	<entry key="deleteUserPS">
+DELETE FROM users
+WHERE name = ?
+	</entry>
+	<entry key="queryBotPS">
+SELECT bot 
+FROM users
+WHERE name = ?
+	</entry>
+<!-- 
+MariaDB proprietary This relies on (user1, user2) being a combined PRIMARY
+KEY in the DB See: https://en.wikipedia.org/wiki/Merge_(SQL)
+See:
+https://mariadb.com/kb/en/library/replace/ See:
+https://mariadb.com/kb/en/library/insert-on-duplicate-key-update/
+
+REPLACE, however, is slow for InnoDB 
+See: https://stackoverflow.com/questions/21485394/replace-into-table-in-mysql-innodb-extremely-slow
+
+Only one direction p1 -plays-> p2 of the match is stored, because this query is executed often. The 
+bidirectional extension p2 -plays-> p1 is only done in queryMatchEventPS
+-->
+	<entry key="upsertMatchEventPS">
+INSERT INTO matches (user1, user2, last_match_event_time)
+	SELECT u1.id, u2.id, UTC_TIMESTAMP()
+	FROM users AS u1, users as u2
+	WHERE u1.name=? AND u2.name=?
+ON DUPLICATE KEY
+UPDATE user1=u1.id, user2=u2.id, last_match_event_time=UTC_TIMESTAMP()
+	</entry>
+	<entry key="garbageCollectMatchEventsPS">
+DELETE FROM matches
+WHERE last_match_event_time &lt; ?
+	</entry>
+	<entry key="queryMatchEventPS">
+SELECT true
+FROM matches, users AS u1, users AS u2
+WHERE u1.name=?
+AND u2.name=?
+AND last_match_event_time >=?
+AND ( u1.id=user1 AND u2.id=user2 OR u1.id=user2 AND u2.id=user1 )
+	</entry>
+
+<!-- 
+// TODO: Proposed command to GC users without any in- or outgoing opinions from
+// time to time
+// DELETE FROM users
+// WHERE users.id NOT IN (SELECT target_user_id from opinions UNION SELECT
+// originating_user_id from opinions)
+// AND alert=false;
+-->
+	<entry key="aliasIsAliasedUserPairPS">
+<!--
+SELECT al.a FROM aliases AS al, users AS u1, users AS u2" +
+WHERE u1.name = ? AND al.a = u1.id" +
+AND u2.name = ? AND al.b = u2.id;"
+-->
+	</entry>
+
+	<entry key="aliasAddInsertPS">
+<!--
+INSERT INTO aliases_created_by_users
+SELECT x.id, y.id, UTC_TIMESTAMP(), ? FROM users AS x, users AS y
+WHERE x.name=? AND y.name=?
+-->
+	</entry>	
+
+	<entry key="aliasListOnePS">
+<!--
+WITH RECURSIVE transitive_closure(a, b, path) AS (
+SELECT a, b, ARRAY[a, b] AS path
+FROM aliases, users
+WHERE aliases.a = users.id AND users.name=?
+UNION
+SELECT tc.a, aliases.b, path || aliases.b AS path
+FROM aliases
+JOIN transitive_closure AS tc ON aliases.a = tc.b
+WHERE aliases.b <> ALL (tc.path)
+)
+SELECT DISTINCT u.name FROM users u, transitive_closure tc
+WHERE u.id = tc.b OR u.id = tc.a
+ORDER BY u.name
+-->
+	</entry>	
+	<entry key="aliasListAllPS">
+	</entry>	
+	<entry key="aliasRemovePS">
+	</entry>	
+	<entry key="aliasIsAliasedUserSinglePS">
+<!-- 
+SELECT id FROM aliases AS al, users AS u
+WHERE u.name = ? AND al.a = u.id
+-->
+	</entry>		
+</properties>

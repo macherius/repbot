@@ -1,0 +1,337 @@
+<html>
+  <head>
+    <title>RepBot client interface protocol (R-CLIP)</title>
+  </head>
+  <body>
+    <h1>RepBot client interface protocol (R-CLIP), version 0.1</h1>
+
+    <h2>Introduction</h2>
+
+    <p>
+      <a href="http://repbot.sourceforge.net">RepBot</a> is a non-playing 
+      bot on <a href="fibs.com">fibs</a>, the First
+      Internet Backgammon Server. RepBot provides a service to the fibs 
+      user community allowing them to query the "Reputation" of a prospective
+      opponent, and to influence that reputation by complaining against or
+      vouching for a user. This helps players to avoid droppers or otherwise
+      abusive players.
+    </p>    
+
+    <p>
+      RepBot communicates with users using the fibs <code>tell</code> command.
+      Usually this happens using a chat window within the graphical client
+      interface. A number of client interface programs, however, integrate
+      RepBot functionality natively. This document describes an interface
+      provided specifically for these programs.
+    </p>
+    
+    <p>
+      Note that RepBot is independent of the fibs server and is not endorsed
+      by its administrators.
+    </p>
+
+    <h2>Motivation</h2>
+    
+    <p>
+      The reasons for providing a distinct interface for client interface 
+      programs are:
+      <ul>
+        <li>
+	  Stability - the human-oriented protocol of the original RepBot 
+	  command set changes for usability concerns or as new features
+	  are added. This breaks client programs that expect the older format.
+	  For example, the list command once generated a single repsonse
+	  line per query. As users accumulated vouches (and complaints), it
+	  became necessary to split the response into multiple lines.
+	</li>
+
+	<li>
+	  Performance - client interface programs are likely to generate
+	  a much higher volume of queries (for example, to show the user
+	  the reputations of all logged-in users). The human-oriented protocol
+	  does not provide for this.
+	</li>
+
+	<li>
+	  Convenience - the human-oriented protocol is, well, human oriented.
+	  As such it is loaded with punctuation and has some variations. It
+	  is also slightly ambiguous.
+	</li>
+      </ul>
+    </p>
+
+    <p>
+      The client interface protocol addresses these issues in the following 
+      ways:
+      <ul>
+        <li>
+	  A stable, versioned protocol is provided. Once defined, a command's
+	  query and response formats are guaranteed to be stable. When new
+	  features are added, a new version of the command is added. Both the
+	  old and new versions will continue to be supported.
+	</li>
+	
+	<li>
+	  Support is provided for multiple user queries so that the client 
+	  interface can populate a user table quickly and efficiently.
+	</li>
+
+	<li>
+	  The protocol is easily parseable; consisting of a sequence of
+	  space-separated words and numbers.
+	</li>
+      </ul>	
+    </p>
+
+    <h2>Protocol specification</h2>
+
+    <h3>General request/reply syntax</h3>
+
+    <p>
+      A client interface request to RepBot always follows the following 
+      format: 
+      
+      <pre><code>
+	raw <i>cookie</i> <i>command</i> <i>version</i> <i>[parameter]...</i>
+      </code></pre>
+
+      Where,
+      <ul>
+        <li>
+	  <code>raw</code> is a prefix common to all client interface protocol
+	  commands, to distinguish them from the human-oriented commands. Just
+	  like the fibs <code>rawwho</code> command.
+	</li>
+
+	<li>
+	  <code><i>cookie</i></code> is an arbitrary string passed by 
+	  the client interface program. RepBot does not examine the cookie,
+	  but simply passes it back in the response. This may simplify
+	  programs that issue concurrent requests to RepBot. If a client
+	  interface does not require cookies, it should just pass some fixed
+	  string here.
+        </li>
+
+	<li>
+	  <code><i>command</i></code> is the name of the command to be
+	  executed by RepBot. The various supported commands are detailed
+	  below.
+	</li>
+
+	<li>
+	  <code><i>version</i></code> is a number describing the version of 
+	  the command that the client interface is using. The command versions 
+	  are documented in this specification. New implementations should use
+	  the latest available version of a command.
+	</li>
+
+	<li>
+	  <code><i>parameter</i></code> is an argument to the command. 
+	  Parameters are described under each command's documentation 
+	  separately.
+         </li>
+      </ul>
+    </p>
+
+    <p>
+      If a command results in an error, RepBot's response is:
+      <pre><code>
+        raw <i>cookie</i> error <i>errno</i> <i>message</i>
+      </code></pre>
+
+      Where 
+      <ul>
+        <li>
+          <code><i>errno</i></code> is a numeric identifier of the error.
+        </li>
+        <li>
+          <code><i>message</i></code> is a human-readable description of the
+          error.
+        </li>
+      </ul>
+    </p>
+
+    <h3><code>ask</code> command (version 1)</h3>
+
+    <p>
+      The <code>ask</code> command's query format is:
+      <pre><code>
+        raw <i>cookie</i> ask 1 <i>user</i>...
+      </code></pre>
+      Where
+      <ul>
+        <li>
+	  <code><i>user</i></code> is the name of a user being queried.
+	  More than one user may be specified. Multiple users are separated by
+	  space.
+	</li>
+      </ul>
+    </p>
+
+    <p>
+      The response to an <code>ask</code> query is:
+      <pre><code>
+        raw <i>cookie</i> ask 1 <i>user reputation vouchers complainers saved-games...</i>
+      </code></pre>
+      Where
+      <ul>
+        <li>
+	  <code><i>user</i></code> is the name of a user being queried. Users
+	  are returned in the same order as they are specified in the query.
+	</li>
+        <li>
+	  <code><i>reputation</i></code> is a signed number indicating the 
+	  user's reputation, or the string <code>-</code> indicating that
+	  the user does not exist.
+	</li>
+        <li>
+	  <code><i>vouchers</i></code> is the number of users who have vouched
+	  for this user, or the string <code>-</code> indicating that
+	  the user does not exist.
+	</li>
+        <li>
+	  <code><i>complainers</i></code> is the number of users who have 
+	  complained about this user, or the string <code>-</code> indicating 
+	  that the user does not exist.
+	</li>
+        <li>
+	  <code><i>saved-games</i></code> is the number of games that the
+	  user has, as far as RepBot can determine, or the string 
+	  <code>-</code> indicating that the user does not exist.
+	</li>
+      </ul>
+    </p>
+
+    <h3><code>list</code> command (version 1)</h3>
+
+    <p>
+      The <code>list</code> command's query format is:
+      <pre><code>
+        raw <i>cookie</i> list 1 <i>user</i>
+      </code></pre>
+      Where
+      <ul>
+        <li>
+	  <code><i>user</i></code> is the name of a user being queried.
+	  Only one user may be specified.
+	</li>
+      </ul>
+    </p>
+
+    <p>
+      The response to a <code>list</code> query is:
+      <pre><code>
+        raw <i>cookie</i> list 1 <i>user</i> 
+	  reputation <i>reputation</i>
+	  vouchers <i>vouchers</i> <i>name</i>...
+	  complainers <i>complainers</i> <i>name</i>...
+	  vouches <i>vouches</i> <i>name</i>...
+	  complaints <i>complaints</i> <i>name</i>...
+	  saved <i>saved</i> <i>name</i>...
+      </code></pre>
+      (all on a single line)
+
+      or, 
+      <pre><code>
+        raw <i>cookie</i> list 1 <i>user</i> nosuch
+      </code></pre>
+
+      Where
+      <ul>
+        <li>
+	  <code><i>user</i></code> is the name of a user being queried.
+	</li>
+        <li>
+	  <code><i>reputation</i></code> is a signed number indicating the 
+	  user's reputation.
+	</li>
+        <li>
+	  <code><i>vouchers</i></code> is the number of users who have vouched
+	  for this user, followed by their names.
+	</li>
+        <li>
+	  <code><i>complainers</i></code> is the number of users who have 
+	  complained about this user, followed by their names.
+	</li>
+        <li>
+	  <code><i>vouches</i></code> is the number of users for whom this user
+	  has vouched, followed by their names.
+	</li>
+        <li>
+	  <code><i>complaints</i></code> is the number of users against whom
+	  the user has lodged a complaint, followed by their names.
+	</li>
+        <li>
+	  <code><i>saved</i></code> is the number of users with whom the user
+	  has a saved game, as far as RepBot knows, followed by their names.
+	</li>
+      </ul>
+    </p>
+
+<!-- TBD
+    <h3><code>vouch</code> command</h3>
+
+    <h3><code>complain</code> command</h3>
+
+    <h3><code>withdraw</code> command</h3>
+-->
+
+    <h2>Protocol usage</h2>
+
+    <h3>Initiating queries</h3>
+
+    <p>
+      Due to bandwidth concerns, a client interface should initiate a query
+      only in response to one of the following events:
+      <ul>
+        <li>
+	  Direct user command, for example clicking the info button while a 
+	  user's name is highlighted.
+	</li>
+
+	<li>
+	  Log-on.
+	</li>
+
+	<li>
+	  When another user initiates contact with the user (for example, an
+	  invitation).
+	</li>
+      </ul>
+      In particular, generating a query on login notifications is likely to
+      saturate RepBot's connection.
+    </p>  
+
+    <h3>Line length</h3>
+
+    <p>
+      The fibs limit on line length appears to b about 1,400 characters. This
+      is the only limit on request and response size.
+    </p>
+
+    <h3>Concurrency</h3>
+
+    <p>
+      RepBot is full concurrent -- it can process multiple queries, from one 
+      or more users, simultaneously. 
+    </p>
+
+    <p>
+      Fibs, however, is not. If you send a command before the preceding command
+      has been acknowledged by fibs (<code>** You tell RepBot: ...</code>),
+      there is a chance that the first command will be lost. Clients must be
+      handle this issue.
+    </p>
+
+    <h3>Timeouts</h3>
+
+    <p>
+      Client interface programs must be prepared for a query to remain 
+      unanswered. It is recommended that each request be timed out 
+      (and possibly retried) if RepBot does not respond within 5 seconds.
+      (Observed latency is 300-600 ms).
+    </p>
+    <hr>
+    <p>$Id: client-interface-protocol.html 117 2003-01-19 20:41:39Z avik $</p>
+  </body>
+</html>

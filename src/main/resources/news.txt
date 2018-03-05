@@ -1,0 +1,7 @@
+# RepBot news 
+
+New! The 'list' command now shows saved games data. 'tell RepBot help list' for more information.
+RepBot has a new command: alert. 'tell RepBot help alert' for the scoop.
+See what your friends think of a player! 'tell RepBot help friends' will show you how.
+If you find RepBot useful, tell your friends and opponents about it! The more players use RepBot, the more useful RepBot becomes.
+RepBot now offers active notification via message for complain, vouch and withdraw events for your account. They are enabled with "tell repbot alert on".

@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.openfibs</groupId>
+	<artifactId>Repbot</artifactId>
+	<!-- 
+	<version>${net.sf.repbot.version.major}.${net.sf.repbot.version.minor}.${net.sf.repbot.version.patch}${net.sf.repbot.version.qualifier}</version>
+ 	-->
+ 	<version>2.3.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<properties>
+		<net.sf.repbot.version.major>2</net.sf.repbot.version.major>
+		<net.sf.repbot.version.minor>3</net.sf.repbot.version.minor>
+		<net.sf.repbot.version.patch>1</net.sf.repbot.version.patch>
+		<net.sf.repbot.version.qualifier>-SNAPSHOT</net.sf.repbot.version.qualifier>
+
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<com.google.dagger.version>2.14.1</com.google.dagger.version>
+		<com.google.dagger.compiler.version>${com.google.dagger.version}</com.google.dagger.compiler.version>
+		<org.projectlombok.version>1.16.20</org.projectlombok.version>
+		<org.mariadb.jdbc.version>2.2.2</org.mariadb.jdbc.version>
+
+		<junit.version>4.12</junit.version>
+		<junit.jupiter.version>5.1.0</junit.jupiter.version>
+		<junit.vintage.version>5.1.0</junit.vintage.version>
+		<junit.platform.version>1.1.0</junit.platform.version>
+		<junit.platform.surefire.provider>1.1.0</junit.platform.surefire.provider>
+	</properties>
+
+	<name>Repbot Application JAR</name>
+	<url>http://www.openfibs.org</url>
+	<description>
+		RepBot is a bot for helping FIBS, the First Internet Backgammon
+		Server, a better place for players. RepBot maintains player
+		reputations, based on other player's opinions. This helps
+		players avoid droppers and otherwise unsocial players.
+	</description>
+
+	<organization>
+		<name>The OpenFIBS Project Team</name>
+		<url>http://www.openfibs.org</url>
+	</organization>
+
+	<developers>
+		<developer>
+			<name>Ingo Macherius (inim)</name>
+			<timezone>+1</timezone>
+			<email>
+				inim (insert at sign) users (insert dot) sourceforge (insert dot) net
+			</email>
+		</developer>
+		<developer>
+			<name>Avi Kivity (avik)</name>
+			<timezone>+3</timezone>
+			<email>
+				avik (insert at sign) users (insert dot) sourceforge (insert dot) net
+			</email>
+		</developer>
+	</developers>
+
+	<dependencies>
+		<!-- https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client -->
+		<dependency>
+			<groupId>org.mariadb.jdbc</groupId>
+			<artifactId>mariadb-java-client</artifactId>
+			<version>${org.mariadb.jdbc.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.dagger</groupId>
+			<artifactId>dagger</artifactId>
+			<version>${com.google.dagger.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>${org.projectlombok.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- https://github.com/junit-team/junit5-samples/blob/master/junit5-maven-consumer/pom.xml -->
+
+		<!-- Only required to run tests in an IDE that bundles an older version -->
+		<!-- <dependency> <groupId>org.junit.platform</groupId> <artifactId>junit-platform-launcher</artifactId> 
+			<version>${junit.platform.version}</version> <scope>test</scope> </dependency> -->
+		<!-- Junit5 -->
+		<!-- <dependency> <groupId>org.junit.jupiter</groupId> <artifactId>junit-jupiter-api</artifactId> 
+			<version>${junit.jupiter.version}</version> <scope>test</scope> </dependency> 
+			<dependency> <groupId>org.junit.jupiter</groupId> <artifactId>junit-jupiter-engine</artifactId> 
+			<version>${junit.jupiter.version}</version> <scope>test</scope> </dependency> -->
+		<!-- Junit4 -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- <dependency> <groupId>org.junit.vintage</groupId> <artifactId>junit-vintage-engine</artifactId> 
+			<version>${junit.vintage.version}</version> <scope>test</scope> </dependency> -->
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.7.0</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					<encoding>UTF-8</encoding>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+							<version>${org.projectlombok.version}</version>
+						</path>
+						<path>
+							<!-- Dependency injection framework -->
+							<!-- https://github.com/google/dagger -->
+							<groupId>com.google.dagger</groupId>
+							<artifactId>dagger-compiler</artifactId>
+							<version>${com.google.dagger.compiler.version}</version>
+						</path>
+					</annotationProcessorPaths>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.0.2</version>
+				<configuration>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.0.2</version>
+				<configuration>
+					<archive>
+						<addMavenDescriptor>false</addMavenDescriptor>
+						<index>false</index>
+						<manifest>
+							<addDefaultImplementationEntries>
+								true
+							</addDefaultImplementationEntries>
+							<addClasspath>true</addClasspath>
+							<mainClass>net.sf.repbot.RepBot</mainClass>
+							<packageName>net.sf.repbot</packageName>
+						</manifest>
+						<manifestEntries>
+							<Built-By>${user.name}</Built-By>
+							<Url>${project.url}</Url>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.20.1</version>
+				<configuration>
+					<includes>
+						<include>**/Test*.java</include>
+						<include>**/*Test.java</include>
+						<include>**/*Tests.java</include>
+						<include>**/*TestCase.java</include>
+					</includes>
+					<properties>
+						<!-- <includeTags>fast</includeTags> -->
+						<excludeTags>slow</excludeTags>
+						<!-- <configurationParameters> junit.jupiter.conditions.deactivate 
+							= * </configurationParameters> -->
+					</properties>
+				</configuration>
+				<dependencies>
+				</dependencies>
+			</plugin>
+		</plugins>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+	</build>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<artifactId>maven-pmd-plugin</artifactId>
+				<version>3.9.0</version>
+				<configuration>
+					<targetJdk>1.8</targetJdk>
+					<linkXref>true</linkXref>
+					<sourceEncoding>utf-8</sourceEncoding>
+					<outputEncoding>utf-8</outputEncoding>
+					<format>html</format>
+					<minimumTokens>100</minimumTokens>
+					<rulesets>
+						<!-- A rule set, that comes bundled with PMD -->
+						<!-- <ruleset>/category/java/bestpractices.xml</ruleset> -->
+					</rulesets>
+				</configuration>
+			</plugin>
+			<plugin>
+				<!-- https://spotbugs.github.io/  -->
+				<groupId>com.github.spotbugs</groupId>
+				<artifactId>spotbugs-maven-plugin</artifactId>
+				<version>3.1.2</version>
+				<configuration>
+					<effort>Max</effort>
+					<threshold>Low</threshold>
+					<failOnError>false</failOnError>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</reporting>
+</project>

@@ -1,0 +1,1 @@
+0,5,10,15,20,25,30,35,40,45,50,55 * * * * /home/repbot/cron/cronRepbot.sh 1>&2 2>/dev/null </dev/null

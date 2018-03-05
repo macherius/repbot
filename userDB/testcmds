@@ -1,0 +1,185 @@
+#First, do comments work? ;)
+#
+#Fill new userBad's complainers list:
+complain ipA 100 userA
+complain ipB 140 userA
+complain ipC 140 userA
+complain ipD 140 userA
+complain ipE 120 userA
+complain ipF 140 userA
+complain ipG 140 userA
+complain ipH 140 userA
+complain ipI 140 userA
+complain ipJ 130 userA
+#
+#
+#userA complainers list should be full
+#userA reputation should be -1330
+dump
+list userA
+#
+#
+#	TEST 10 max on complainers list
+complain notOnList 10 userA
+# not OnList should NOT be on userA's complainers list:
+dump
+list userA
+#
+#
+#	TEST replacement
+#		first on list
+complain replaceFirst 105 userA
+#replaceFirst should be first on userA's complainers list:
+#ipA should be garbage collected from inputproviders' table:
+dump
+list userA
+#
+#
+#		TEST replace middle in list
+complain ipA 140 userA
+complain replaceMiddle 125 userA
+#replaceMiddle should be somewhere on userA's complainers list:
+#ipE should be garbage collected from inputproviders' table:
+dump
+list userA
+#
+#
+#		TEST last on list
+complain ipE 140 userA
+complain replaceLast 135 userA
+#replaceLast should be last on userA's complainers list:
+#ipJ should be garbage collected from inputproviders' table:
+dump
+list userA
+#
+#
+#	TEST already on list, update experience?
+complain ipB 210 userA
+#there should be no change other than ipB's experience update:
+dump
+list userA
+#
+#
+#switch all to vouchers
+withdraw replaceLast 135 userA
+vouch ipA 200 userA
+vouch ipB 240 userA
+vouch ipC 240 userA
+vouch ipD 240 userA
+vouch ipE 220 userA
+vouch ipF 240 userA
+vouch ipG 240 userA
+vouch ipH 240 userA
+vouch ipI 240 userA
+vouch ipJ 230 userA
+#all complainers now vouchers, reputation to + 2330
+dump
+list userA
+#
+#
+#	TEST 10 max on complainers list
+vouch notOnList 10 userA
+#notOnList should not appear, no changes from above
+dump
+list userA
+#
+#
+#	TEST replacement
+#		first on list
+vouch replaceFirst 205 userA
+dump
+list userA
+#
+#
+#		TEST middle in list
+vouch ipA 240 userA
+vouch replaceMiddle 225 userA
+dump
+list userA
+#
+#
+#		TEST last on list
+vouch ipE 240 userA
+vouch replaceLast 235 userA
+dump
+list userA
+#
+#
+#	TEST already on list
+vouch ipG 241 userA
+dump
+list userA
+#
+#
+# TEST withdraw a complainer and verify GC of IP
+withdraw ipC 240 userA
+dump
+list userA
+#
+#
+#TEST maxComplaints/Vouches of one of the complainers
+complain ipD 301 userA
+complain ipD 401 userB
+complain ipD 403 userC
+complain ipD 404 userD
+complain ipD 405 userE
+complain ipD 406 userF
+complain ipD 408 userG
+complain ipD 501 userH
+complain ipD 501 userI
+complain ipD 501 userJ
+dump
+list ipD
+complain ipD 601 ToManyComplaints
+vouch ipD 1401 userA
+vouch ipD 1401 userB
+vouch ipD 1403 userC
+vouch ipD 1404 userD
+vouch ipD 1405 userE
+vouch ipD 1406 userF
+vouch ipD 1408 userG
+vouch ipD 1501 userH
+vouch ipD 1501 userI
+vouch ipD 1501 userJ
+vouch ipD 1601 ToManyVouches
+dump
+list userA
+#
+#
+#TEST switch from V to C at least once
+complain ipD 1700 userA
+dump
+list userA
+#
+#
+#TEST complain/vouch about myself
+complain ipA 2000 ipA
+vouch ipB 2000 ipB
+dump
+list ipB
+#
+#
+#TEST withdraw all and TEST user GC
+withdraw ipA 2000 userA
+withdraw ipB 2000 userA
+withdraw ipC 2000 userA
+withdraw ipD 2000 userA
+withdraw ipE 2000 userA
+withdraw ipF 2000 userA
+withdraw ipG 2000 userA
+withdraw ipH 2000 userA
+withdraw ipI 2000 userA
+withdraw replaceLast 2000 userA
+withdraw ipD 1401 userB
+withdraw ipD 1403 userC
+withdraw ipD 1404 userD
+withdraw ipD 1405 userE
+withdraw ipD 1406 userF
+withdraw ipD 1408 userG
+withdraw ipD 1501 userH
+withdraw ipD 1501 userI
+withdraw ipD 1501 userJ
+dump
+list userA
+#boundary conditions of exp/username
+#reliability, speed, consistency, etc...

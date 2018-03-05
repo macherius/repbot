@@ -1,0 +1,656 @@
+#First, do comments work? ;)
+#
+#Fill new userBad's complainers list:
+complain ipA 100 userA
+complain ipB 140 userA
+complain ipC 140 userA
+complain ipD 140 userA
+complain ipE 120 userA
+complain ipF 140 userA
+complain ipG 140 userA
+complain ipH 140 userA
+complain ipI 140 userA
+complain ipJ 130 userA
+#
+#
+#userA complainers list should be full
+#userA reputation should be -1330
+dump
+USERS:	NAME	COMPLAINERS	VOUCHERS	REPUTATION
+	userA					-1330
+		,ipA,ipB,ipC,ipD,ipE,ipF,ipG,ipH,ipI,ipJ,
+				,,,,,,,,,,,
+IPs:	NAME	EXPERIENCE	nComplaints	nVouches
+	ipA	100		1		0
+	ipB	140		1		0
+	ipC	140		1		0
+	ipD	140		1		0
+	ipE	120		1		0
+	ipF	140		1		0
+	ipG	140		1		0
+	ipH	140		1		0
+	ipI	140		1		0
+	ipJ	130		1		0
+
+list userA
+complainers:,ipA,ipB,ipC,ipD,ipE,ipF,ipG,ipH,ipI,ipJ,
+vouchers:,,,,,,,,,,,
+complaints:
+vouches:
+#
+#
+#	TEST 10 max on complainers list
+complain notOnList 10 userA
+userDB.UserDBException: notOnList does not have more experience than current complainers
+	at userDB.UserDBImplementation.complain(UserDBImplementation.java:441)
+	at userDB.UserDBImplementation.main(UserDBImplementation.java:164)
+# not OnList should NOT be on userA's complainers list:
+dump
+USERS:	NAME	COMPLAINERS	VOUCHERS	REPUTATION
+	userA					-1330
+		,ipA,ipB,ipC,ipD,ipE,ipF,ipG,ipH,ipI,ipJ,
+				,,,,,,,,,,,
+IPs:	NAME	EXPERIENCE	nComplaints	nVouches
+	ipA	100		1		0
+	ipB	140		1		0
+	ipC	140		1		0
+	ipD	140		1		0
+	ipE	120		1		0
+	ipF	140		1		0
+	ipG	140		1		0
+	ipH	140		1		0
+	ipI	140		1		0
+	ipJ	130		1		0
+
+list userA
+complainers:,ipA,ipB,ipC,ipD,ipE,ipF,ipG,ipH,ipI,ipJ,
+vouchers:,,,,,,,,,,,
+complaints:
+vouches:
+#
+#
+#	TEST replacement
+#		first on list
+complain replaceFirst 105 userA
+#replaceFirst should be first on userA's complainers list:
+#ipA should be garbage collected from inputproviders' table:
+dump
+USERS:	NAME	COMPLAINERS	VOUCHERS	REPUTATION
+	userA					-1335
+		,replaceFirst,ipB,ipC,ipD,ipE,ipF,ipG,ipH,ipI,ipJ,
+				,,,,,,,,,,,
+IPs:	NAME	EXPERIENCE	nComplaints	nVouches
+	ipB	140		1		0
+	ipC	140		1		0
+	ipD	140		1		0
+	ipE	120		1		0
+	ipF	140		1		0
+	ipG	140		1		0
+	ipH	140		1		0
+	ipI	140		1		0
+	ipJ	130		1		0
+	replaceFirst	105		1		0
+
+list userA
+complainers:,replaceFirst,ipB,ipC,ipD,ipE,ipF,ipG,ipH,ipI,ipJ,
+vouchers:,,,,,,,,,,,
+complaints:
+vouches:
+#
+#
+#		TEST replace middle in list
+complain ipA 140 userA
+complain replaceMiddle 125 userA
+#replaceMiddle should be somewhere on userA's complainers list:
+#ipE should be garbage collected from inputproviders' table:
+dump
+USERS:	NAME	COMPLAINERS	VOUCHERS	REPUTATION
+	userA					-1375
+		,ipA,ipB,ipC,ipD,replaceMiddle,ipF,ipG,ipH,ipI,ipJ,
+				,,,,,,,,,,,
+IPs:	NAME	EXPERIENCE	nComplaints	nVouches
+	ipB	140		1		0
+	ipC	140		1		0
+	ipD	140		1		0
+	ipF	140		1		0
+	ipG	140		1		0
+	ipH	140		1		0
+	ipI	140		1		0
+	ipJ	130		1		0
+	ipA	140		1		0
+	replaceMiddle	125		1		0
+
+list userA
+complainers:,ipA,ipB,ipC,ipD,replaceMiddle,ipF,ipG,ipH,ipI,ipJ,
+vouchers:,,,,,,,,,,,
+complaints:
+vouches:
+#
+#
+#		TEST last on list
+complain ipE 140 userA
+complain replaceLast 135 userA
+#replaceLast should be last on userA's complainers list:
+#ipJ should be garbage collected from inputproviders' table:
+dump
+USERS:	NAME	COMPLAINERS	VOUCHERS	REPUTATION
+	userA					-1395
+		,ipA,ipB,ipC,ipD,ipE,ipF,ipG,ipH,ipI,replaceLast,
+				,,,,,,,,,,,
+IPs:	NAME	EXPERIENCE	nComplaints	nVouches
+	ipB	140		1		0
+	ipC	140		1		0
+	ipD	140		1		0
+	ipF	140		1		0
+	ipG	140		1		0
+	ipH	140		1		0
+	ipI	140		1		0
+	ipA	140		1		0
+	ipE	140		1		0
+	replaceLast	135		1		0
+
+list userA
+complainers:,ipA,ipB,ipC,ipD,ipE,ipF,ipG,ipH,ipI,replaceLast,
+vouchers:,,,,,,,,,,,
+complaints:
+vouches:
+#
+#
+#	TEST already on list, update experience?
+complain ipB 210 userA
+userDB.UserDBException: ipB already complained about userA
+	at userDB.UserDBImplementation.complain(UserDBImplementation.java:441)
+	at userDB.UserDBImplementation.main(UserDBImplementation.java:164)
+#there should be no change other than ipB's experience update:
+dump
+USERS:	NAME	COMPLAINERS	VOUCHERS	REPUTATION
+	userA					-1395
+		,ipA,ipB,ipC,ipD,ipE,ipF,ipG,ipH,ipI,replaceLast,
+				,,,,,,,,,,,
+IPs:	NAME	EXPERIENCE	nComplaints	nVouches
+	ipB	210		1		0
+	ipC	140		1		0
+	ipD	140		1		0
+	ipF	140		1		0
+	ipG	140		1		0
+	ipH	140		1		0
+	ipI	140		1		0
+	ipA	140		1		0
+	ipE	140		1		0
+	replaceLast	135		1		0
+
+list userA
+complainers:,ipA,ipB,ipC,ipD,ipE,ipF,ipG,ipH,ipI,replaceLast,
+vouchers:,,,,,,,,,,,
+complaints:
+vouches:
+#
+#
+#switch all to vouchers
+withdraw replaceLast 135 userA
+vouch ipA 200 userA
+vouch ipB 240 userA
+vouch ipC 240 userA
+vouch ipD 240 userA
+vouch ipE 220 userA
+vouch ipF 240 userA
+vouch ipG 240 userA
+vouch ipH 240 userA
+vouch ipI 240 userA
+vouch ipJ 230 userA
+#all complainers now vouchers, reputation to + 2330
+dump
+USERS:	NAME	COMPLAINERS	VOUCHERS	REPUTATION
+	userA					2330
+		,,,,,,,,,,,
+				,ipA,ipB,ipC,ipD,ipE,ipF,ipG,ipH,ipI,ipJ,
+IPs:	NAME	EXPERIENCE	nComplaints	nVouches
+	ipB	240		0		1
+	ipC	240		0		1
+	ipD	240		0		1
+	ipF	240		0		1
+	ipG	240		0		1
+	ipH	240		0		1
+	ipI	240		0		1
+	ipA	200		0		1
+	ipE	220		0		1
+	ipJ	230		0		1
+
+list userA
+complainers:,,,,,,,,,,,
+vouchers:,ipA,ipB,ipC,ipD,ipE,ipF,ipG,ipH,ipI,ipJ,
+complaints:
+vouches:
+#
+#
+#	TEST 10 max on complainers list
+vouch notOnList 10 userA
+userDB.UserDBException: notOnList does not have more experience than current vouchers
+	at userDB.UserDBImplementation.vouch(UserDBImplementation.java:552)
+	at userDB.UserDBImplementation.main(UserDBImplementation.java:187)
+#notOnList should not appear, no changes from above
+dump
+USERS:	NAME	COMPLAINERS	VOUCHERS	REPUTATION
+	userA					2330
+		,,,,,,,,,,,
+				,ipA,ipB,ipC,ipD,ipE,ipF,ipG,ipH,ipI,ipJ,
+IPs:	NAME	EXPERIENCE	nComplaints	nVouches
+	ipB	240		0		1
+	ipC	240		0		1
+	ipD	240		0		1
+	ipF	240		0		1
+	ipG	240		0		1
+	ipH	240		0		1
+	ipI	240		0		1
+	ipA	200		0		1
+	ipE	220		0		1
+	ipJ	230		0		1
+
+list userA
+complainers:,,,,,,,,,,,
+vouchers:,ipA,ipB,ipC,ipD,ipE,ipF,ipG,ipH,ipI,ipJ,
+complaints:
+vouches:
+#
+#
+#	TEST replacement
+#		first on list
+vouch replaceFirst 205 userA
+dump
+USERS:	NAME	COMPLAINERS	VOUCHERS	REPUTATION
+	userA					2335
+		,,,,,,,,,,,
+				,replaceFirst,ipB,ipC,ipD,ipE,ipF,ipG,ipH,ipI,ipJ,
+IPs:	NAME	EXPERIENCE	nComplaints	nVouches
+	ipB	240		0		1
+	ipC	240		0		1
+	ipD	240		0		1
+	ipF	240		0		1
+	ipG	240		0		1
+	ipH	240		0		1
+	ipI	240		0		1
+	ipE	220		0		1
+	ipJ	230		0		1
+	replaceFirst	205		0		1
+
+list userA
+complainers:,,,,,,,,,,,
+vouchers:,replaceFirst,ipB,ipC,ipD,ipE,ipF,ipG,ipH,ipI,ipJ,
+complaints:
+vouches:
+#
+#
+#		TEST middle in list
+vouch ipA 240 userA
+vouch replaceMiddle 225 userA
+dump
+USERS:	NAME	COMPLAINERS	VOUCHERS	REPUTATION
+	userA					2375
+		,,,,,,,,,,,
+				,ipA,ipB,ipC,ipD,replaceMiddle,ipF,ipG,ipH,ipI,ipJ,
+IPs:	NAME	EXPERIENCE	nComplaints	nVouches
+	ipB	240		0		1
+	ipC	240		0		1
+	ipD	240		0		1
+	ipF	240		0		1
+	ipG	240		0		1
+	ipH	240		0		1
+	ipI	240		0		1
+	ipJ	230		0		1
+	ipA	240		0		1
+	replaceMiddle	225		0		1
+
+list userA
+complainers:,,,,,,,,,,,
+vouchers:,ipA,ipB,ipC,ipD,replaceMiddle,ipF,ipG,ipH,ipI,ipJ,
+complaints:
+vouches:
+#
+#
+#		TEST last on list
+vouch ipE 240 userA
+vouch replaceLast 235 userA
+dump
+USERS:	NAME	COMPLAINERS	VOUCHERS	REPUTATION
+	userA					2395
+		,,,,,,,,,,,
+				,ipA,ipB,ipC,ipD,ipE,ipF,ipG,ipH,ipI,replaceLast,
+IPs:	NAME	EXPERIENCE	nComplaints	nVouches
+	ipB	240		0		1
+	ipC	240		0		1
+	ipD	240		0		1
+	ipF	240		0		1
+	ipG	240		0		1
+	ipH	240		0		1
+	ipI	240		0		1
+	ipA	240		0		1
+	ipE	240		0		1
+	replaceLast	235		0		1
+
+list userA
+complainers:,,,,,,,,,,,
+vouchers:,ipA,ipB,ipC,ipD,ipE,ipF,ipG,ipH,ipI,replaceLast,
+complaints:
+vouches:
+#
+#
+#	TEST already on list
+vouch ipG 241 userA
+userDB.UserDBException: ipG already vouched for userA
+	at userDB.UserDBImplementation.vouch(UserDBImplementation.java:552)
+	at userDB.UserDBImplementation.main(UserDBImplementation.java:187)
+dump
+USERS:	NAME	COMPLAINERS	VOUCHERS	REPUTATION
+	userA					2395
+		,,,,,,,,,,,
+				,ipA,ipB,ipC,ipD,ipE,ipF,ipG,ipH,ipI,replaceLast,
+IPs:	NAME	EXPERIENCE	nComplaints	nVouches
+	ipB	240		0		1
+	ipC	240		0		1
+	ipD	240		0		1
+	ipF	240		0		1
+	ipG	241		0		1
+	ipH	240		0		1
+	ipI	240		0		1
+	ipA	240		0		1
+	ipE	240		0		1
+	replaceLast	235		0		1
+
+list userA
+complainers:,,,,,,,,,,,
+vouchers:,ipA,ipB,ipC,ipD,ipE,ipF,ipG,ipH,ipI,replaceLast,
+complaints:
+vouches:
+#
+#
+# TEST withdraw a complainer and verify GC of IP
+withdraw ipC 240 userA
+dump
+USERS:	NAME	COMPLAINERS	VOUCHERS	REPUTATION
+	userA					2156
+		,,,,,,,,,,,
+				,ipA,ipB,ipD,ipE,ipF,ipG,ipH,ipI,replaceLast,,
+IPs:	NAME	EXPERIENCE	nComplaints	nVouches
+	ipB	240		0		1
+	ipD	240		0		1
+	ipF	240		0		1
+	ipG	241		0		1
+	ipH	240		0		1
+	ipI	240		0		1
+	ipA	240		0		1
+	ipE	240		0		1
+	replaceLast	235		0		1
+
+list userA
+complainers:,,,,,,,,,,,
+vouchers:,ipA,ipB,ipD,ipE,ipF,ipG,ipH,ipI,replaceLast,,
+complaints:
+vouches:
+#
+#
+#TEST maxComplaints/Vouches of one of the complainers
+complain ipD 301 userA
+complain ipD 401 userB
+complain ipD 403 userC
+complain ipD 404 userD
+complain ipD 405 userE
+complain ipD 406 userF
+complain ipD 408 userG
+complain ipD 501 userH
+complain ipD 501 userI
+complain ipD 501 userJ
+dump
+USERS:	NAME	COMPLAINERS	VOUCHERS	REPUTATION
+	userA					1615
+		,ipD,,,,,,,,,,
+				,ipA,ipB,ipE,ipF,ipG,ipH,ipI,replaceLast,,,
+	userB					-401
+		,ipD,,,,,,,,,,
+				,,,,,,,,,,,
+	userC					-403
+		,ipD,,,,,,,,,,
+				,,,,,,,,,,,
+	userD					-404
+		,ipD,,,,,,,,,,
+				,,,,,,,,,,,
+	userE					-405
+		,ipD,,,,,,,,,,
+				,,,,,,,,,,,
+	userF					-406
+		,ipD,,,,,,,,,,
+				,,,,,,,,,,,
+	userG					-408
+		,ipD,,,,,,,,,,
+				,,,,,,,,,,,
+	userH					-501
+		,ipD,,,,,,,,,,
+				,,,,,,,,,,,
+	userI					-501
+		,ipD,,,,,,,,,,
+				,,,,,,,,,,,
+	userJ					-501
+		,ipD,,,,,,,,,,
+				,,,,,,,,,,,
+IPs:	NAME	EXPERIENCE	nComplaints	nVouches
+	ipB	240		0		1
+	ipD	501		10		0
+	ipF	240		0		1
+	ipG	241		0		1
+	ipH	240		0		1
+	ipI	240		0		1
+	ipA	240		0		1
+	ipE	240		0		1
+	replaceLast	235		0		1
+
+list ipD
+userDB.UserDBException: ipD
+	at userDB.UserDBImplementation.getComplainers(UserDBImplementation.java:237)
+	at userDB.UserDBImplementation.main(UserDBImplementation.java:171)
+complain ipD 601 ToManyComplaints
+userDB.UserDBException: ipD over max complaints
+	at userDB.UserDBImplementation.complain(UserDBImplementation.java:441)
+	at userDB.UserDBImplementation.main(UserDBImplementation.java:164)
+vouch ipD 1401 userA
+vouch ipD 1401 userB
+vouch ipD 1403 userC
+vouch ipD 1404 userD
+vouch ipD 1405 userE
+vouch ipD 1406 userF
+vouch ipD 1408 userG
+vouch ipD 1501 userH
+vouch ipD 1501 userI
+vouch ipD 1501 userJ
+vouch ipD 1601 ToManyVouches
+userDB.UserDBException: ipD over max vouches
+	at userDB.UserDBImplementation.vouch(UserDBImplementation.java:552)
+	at userDB.UserDBImplementation.main(UserDBImplementation.java:187)
+dump
+USERS:	NAME	COMPLAINERS	VOUCHERS	REPUTATION
+	userA					3317
+		,,,,,,,,,,,
+				,ipA,ipB,ipE,ipF,ipG,ipH,ipI,replaceLast,ipD,,
+	userB					1401
+		,,,,,,,,,,,
+				,ipD,,,,,,,,,,
+	userC					1403
+		,,,,,,,,,,,
+				,ipD,,,,,,,,,,
+	userD					1404
+		,,,,,,,,,,,
+				,ipD,,,,,,,,,,
+	userE					1405
+		,,,,,,,,,,,
+				,ipD,,,,,,,,,,
+	userF					1406
+		,,,,,,,,,,,
+				,ipD,,,,,,,,,,
+	userG					1408
+		,,,,,,,,,,,
+				,ipD,,,,,,,,,,
+	userH					1501
+		,,,,,,,,,,,
+				,ipD,,,,,,,,,,
+	userI					1501
+		,,,,,,,,,,,
+				,ipD,,,,,,,,,,
+	userJ					1501
+		,,,,,,,,,,,
+				,ipD,,,,,,,,,,
+IPs:	NAME	EXPERIENCE	nComplaints	nVouches
+	ipB	240		0		1
+	ipD	1501		0		10
+	ipF	240		0		1
+	ipG	241		0		1
+	ipH	240		0		1
+	ipI	240		0		1
+	ipA	240		0		1
+	ipE	240		0		1
+	replaceLast	235		0		1
+
+list userA
+complainers:,,,,,,,,,,,
+vouchers:,ipA,ipB,ipE,ipF,ipG,ipH,ipI,replaceLast,ipD,,
+complaints:
+vouches:
+#
+#
+#TEST switch from V to C at least once
+complain ipD 1700 userA
+dump
+USERS:	NAME	COMPLAINERS	VOUCHERS	REPUTATION
+	userA					216
+		,ipD,,,,,,,,,,
+				,ipA,ipB,ipE,ipF,ipG,ipH,ipI,replaceLast,,,
+	userB					1401
+		,,,,,,,,,,,
+				,ipD,,,,,,,,,,
+	userC					1403
+		,,,,,,,,,,,
+				,ipD,,,,,,,,,,
+	userD					1404
+		,,,,,,,,,,,
+				,ipD,,,,,,,,,,
+	userE					1405
+		,,,,,,,,,,,
+				,ipD,,,,,,,,,,
+	userF					1406
+		,,,,,,,,,,,
+				,ipD,,,,,,,,,,
+	userG					1408
+		,,,,,,,,,,,
+				,ipD,,,,,,,,,,
+	userH					1501
+		,,,,,,,,,,,
+				,ipD,,,,,,,,,,
+	userI					1501
+		,,,,,,,,,,,
+				,ipD,,,,,,,,,,
+	userJ					1501
+		,,,,,,,,,,,
+				,ipD,,,,,,,,,,
+IPs:	NAME	EXPERIENCE	nComplaints	nVouches
+	ipB	240		0		1
+	ipD	1700		1		9
+	ipF	240		0		1
+	ipG	241		0		1
+	ipH	240		0		1
+	ipI	240		0		1
+	ipA	240		0		1
+	ipE	240		0		1
+	replaceLast	235		0		1
+
+list userA
+complainers:,ipD,,,,,,,,,,
+vouchers:,ipA,ipB,ipE,ipF,ipG,ipH,ipI,replaceLast,,,
+complaints:
+vouches:
+#
+#
+#TEST complain/vouch about myself
+complain ipA 2000 ipA
+userDB.UserDBException: can not complain about yourself
+	at userDB.UserDBImplementation.complain(UserDBImplementation.java:382)
+	at userDB.UserDBImplementation.main(UserDBImplementation.java:164)
+vouch ipB 2000 ipB
+userDB.UserDBException: can not vouch for yourself
+	at userDB.UserDBImplementation.vouch(UserDBImplementation.java:493)
+	at userDB.UserDBImplementation.main(UserDBImplementation.java:187)
+dump
+USERS:	NAME	COMPLAINERS	VOUCHERS	REPUTATION
+	userA					216
+		,ipD,,,,,,,,,,
+				,ipA,ipB,ipE,ipF,ipG,ipH,ipI,replaceLast,,,
+	userB					1401
+		,,,,,,,,,,,
+				,ipD,,,,,,,,,,
+	userC					1403
+		,,,,,,,,,,,
+				,ipD,,,,,,,,,,
+	userD					1404
+		,,,,,,,,,,,
+				,ipD,,,,,,,,,,
+	userE					1405
+		,,,,,,,,,,,
+				,ipD,,,,,,,,,,
+	userF					1406
+		,,,,,,,,,,,
+				,ipD,,,,,,,,,,
+	userG					1408
+		,,,,,,,,,,,
+				,ipD,,,,,,,,,,
+	userH					1501
+		,,,,,,,,,,,
+				,ipD,,,,,,,,,,
+	userI					1501
+		,,,,,,,,,,,
+				,ipD,,,,,,,,,,
+	userJ					1501
+		,,,,,,,,,,,
+				,ipD,,,,,,,,,,
+IPs:	NAME	EXPERIENCE	nComplaints	nVouches
+	ipB	240		0		1
+	ipD	1700		1		9
+	ipF	240		0		1
+	ipG	241		0		1
+	ipH	240		0		1
+	ipI	240		0		1
+	ipA	240		0		1
+	ipE	240		0		1
+	replaceLast	235		0		1
+
+list ipB
+userDB.UserDBException: ipB
+	at userDB.UserDBImplementation.getComplainers(UserDBImplementation.java:237)
+	at userDB.UserDBImplementation.main(UserDBImplementation.java:171)
+#
+#
+#TEST withdraw all and TEST user GC
+withdraw ipA 2000 userA
+withdraw ipB 2000 userA
+withdraw ipC 2000 userA
+withdraw ipD 2000 userA
+withdraw ipE 2000 userA
+withdraw ipF 2000 userA
+withdraw ipG 2000 userA
+withdraw ipH 2000 userA
+withdraw ipI 2000 userA
+withdraw replaceLast 2000 userA
+withdraw ipD 1401 userB
+withdraw ipD 1403 userC
+withdraw ipD 1404 userD
+withdraw ipD 1405 userE
+withdraw ipD 1406 userF
+withdraw ipD 1408 userG
+withdraw ipD 1501 userH
+withdraw ipD 1501 userI
+withdraw ipD 1501 userJ
+dump
+USERS:	NAME	COMPLAINERS	VOUCHERS	REPUTATION
+IPs:	NAME	EXPERIENCE	nComplaints	nVouches
+
+list userA
+userDB.UserDBException: userA
+	at userDB.UserDBImplementation.getComplainers(UserDBImplementation.java:237)
+	at userDB.UserDBImplementation.main(UserDBImplementation.java:171)
+#boundary conditions of exp/username
+#reliability, speed, consistency, etc...
