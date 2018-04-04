@@ -36,10 +36,7 @@
 		<maven.jar.plugin.version>${maven.resources.plugin.version}</maven.jar.plugin.version>
 		<maven.surefire.plugin.version>2.21.0</maven.surefire.plugin.version>
 		<maven.pmd.plugin.version>3.9.0</maven.pmd.plugin.version>
-		<!-- version 6.1.0 available, but has incompatible API change -->
-		<io.github.pmd.version>6.0.1</io.github.pmd.version>
-		<!-- <io.github.pmd.version>6.0.1</io.github.pmd.version> -->
-		<!-- <io.github.pmd.version>6.1.0</io.github.pmd.version> -->
+		<io.github.pmd.version>6.2.0</io.github.pmd.version>
 		<maven.sportbugs.plugin.version>3.1.2</maven.sportbugs.plugin.version>
 	</properties>
 
