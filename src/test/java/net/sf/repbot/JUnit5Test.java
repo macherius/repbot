@@ -1,21 +1,20 @@
 package net.sf.repbot;
 
-//import org.junit.jupiter.api.Test;
-//import static org.junit.jupiter.api.Assertions.assertEquals;
-//
-//import org.junit.jupiter.api.DisplayName;
-//import org.junit.jupiter.api.Tag;
-//import org.junit.jupiter.api.Test;
-//import org.junit.jupiter.api.TestInfo;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-//@Tag("fast")
-class JUnit5Test {
+import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.TestInfo;
+import org.junit.jupiter.api.Tag;
 
-//	@Test
-//	@DisplayName("My 1st JUnit 5 test! 😎")
-//	void justAnExample() {
-//		assertEquals(3, 2 + 1);
+@Tag("fast")
+public class JUnit5Test {
+
+	@Test
+	@DisplayName("My 1st JUnit 5 test! 😎")
+	public void justAnExample() {
+		assertEquals(3, 2 + 1);
 //		assertEquals("My 1st JUnit 5 test! 😎", testInfo.getDisplayName(), () -> "TestInfo is injected correctly");
-//		System.out.println("This test method should be run");
-//	}
+		System.out.println("This test method should be run");
+	}
 }
