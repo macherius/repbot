@@ -1,7 +1,5 @@
 package net.sf.repbot.server.command;
 
-import java.util.regex.*;
-
 import lombok.Getter;
 import net.sf.repbot.server.CommandQueue;
 import net.sf.repbot.server.FibsListener;
