@@ -23,20 +23,26 @@ public class NoiseGenerator implements LineListener, TimeoutListener {
 	private TimeUnit timeoutUnit;
 	private Server server;
 	private Executor cron;
+	private Logger logger;
 
 	/** Creates a new instance of NoiseGenerator */
-	public NoiseGenerator(long timeout, TimeUnit timeoutUnit, Server server, Executor cron) {
+	public NoiseGenerator(long timeout, TimeUnit timeoutUnit, Server server, Executor cron, Logger logger) {
 		this.timeout = timeout;
 		this.timeoutUnit = timeoutUnit;
 		this.server = server;
 		this.cron = cron;
+		this.logger = logger;
 		cron.addTimeout(this, timeout, timeoutUnit);
 	}
 
 	/** Called on a received line. Reschedules the timeout. */
 	@Override
 	public void onLine(String line, FibsListener connection) {
-		cron.removeTimeout(this);
+		try {
+			cron.removeTimeout(this);			
+		} catch (IllegalStateException ise) {
+			logger.logTimestampedLine(ise);
+		}
 		cron.addTimeout(this, timeout, timeoutUnit);
 	}
 

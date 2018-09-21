@@ -30,7 +30,7 @@ public class Executor {
 	 * Timers
 	 */
 
-	public void addTimeout(TimeoutListener callback, long delay, TimeUnit timeUnit) {
+	public void addTimeout(TimeoutListener callback, long delay, TimeUnit timeUnit) throws IllegalStateException {
 		if (timeoutEntries.containsKey(callback))
 			throw new IllegalStateException("Timeout already registered");
 		// System.out.printf("Add Callback=%s, Delay=%d, TimeUnit=%s \n", callback,
@@ -45,7 +45,7 @@ public class Executor {
 		timeoutEntries.put(callback, sf);
 	}
 
-	public void removeTimeout(TimeoutListener callback) {
+	public void removeTimeout(TimeoutListener callback) throws IllegalStateException {
 		ScheduledFuture<?> sf = timeoutEntries.remove(callback);
 		if (sf == null)
 			throw new IllegalStateException("Timeout not registered");
@@ -53,7 +53,7 @@ public class Executor {
 		// sf.toString());
 		sf.cancel(false);
 	}
-	
+
 	/*
 	 * Periodic tasks
 	 */

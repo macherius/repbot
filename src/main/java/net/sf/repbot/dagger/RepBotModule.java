@@ -110,11 +110,11 @@ public class RepBotModule {
 
 	@Provides
 	@Singleton
-	static NoiseGenerator provideNoiseGenerator(Preferences prefs, Server server, Executor cron) {
+	static NoiseGenerator provideNoiseGenerator(Preferences prefs, Server server, Executor cron, Logger logger) {
 		// TODO: Make preferences entry
 		long timeout = TimeUnit.MINUTES.toSeconds(4) + 30;
 		TimeUnit timeoutUnit = TimeUnit.SECONDS;
-		return new NoiseGenerator(timeout, timeoutUnit, server, cron);
+		return new NoiseGenerator(timeout, timeoutUnit, server, cron, logger);
 	}
 
 	@Provides
