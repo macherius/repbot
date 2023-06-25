@@ -35,7 +35,7 @@
 		<maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
 		<maven.jar.plugin.version>3.3.0</maven.jar.plugin.version>
 		<maven.surefire.plugin.version>3.1.2</maven.surefire.plugin.version>
-		<maven.pmd.plugin.version>3.10.0</maven.pmd.plugin.version>
+		<maven.pmd.plugin.version>3.21.0</maven.pmd.plugin.version>
 		<io.github.pmd.version>6.7.0</io.github.pmd.version>
 		<maven.sportbugs.plugin.version>3.1.7</maven.sportbugs.plugin.version>
 	</properties>
