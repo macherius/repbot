@@ -24,7 +24,7 @@
 		<com.google.dagger.compiler.version>${com.google.dagger.version}</com.google.dagger.compiler.version>
 		<org.projectlombok.version>1.18.30</org.projectlombok.version>
 		<org.mariadb.jdbc.version>3.1.4</org.mariadb.jdbc.version>
-		<org.apache.logging.log4j.version>2.20.0</org.apache.logging.log4j.version>
+		<org.apache.logging.log4j.version>2.23.1</org.apache.logging.log4j.version>
 
 		<junit.version>4.13.2</junit.version>
 		<junit.jupiter.version>5.9.3</junit.jupiter.version>
@@ -139,9 +139,9 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>${maven.compiler.plugin.version}</version>
 				<configuration>
-				 <release>17</release>
+				 <release>21</release>
 					<jdkToolchain>
-						<version>17</version>
+						<version>21</version>
 					</jdkToolchain>
 
 					<source>${net.sf.repbot.version.jre}</source>
@@ -176,7 +176,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
-				<version>3.3.0</version>
+				<version>${maven.jar.plugin.version}</version>
 				<configuration>
 					<archive>
 						<addMavenDescriptor>false</addMavenDescriptor>
