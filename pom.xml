@@ -22,7 +22,7 @@
 
 		<com.google.dagger.version>2.51.1</com.google.dagger.version>
 		<com.google.dagger.compiler.version>${com.google.dagger.version}</com.google.dagger.compiler.version>
-		<org.projectlombok.version>1.18.30</org.projectlombok.version>
+		<org.projectlombok.version>1.18.32</org.projectlombok.version>
 		<org.mariadb.jdbc.version>3.1.4</org.mariadb.jdbc.version>
 		<org.apache.logging.log4j.version>2.23.1</org.apache.logging.log4j.version>
 
