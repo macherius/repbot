@@ -36,7 +36,7 @@
 		<maven.surefire.plugin.version>3.2.5</maven.surefire.plugin.version>
 		<maven.pmd.plugin.version>3.21.0</maven.pmd.plugin.version>
 		<io.github.pmd.version>6.55.0</io.github.pmd.version>
-		<maven.sportbugs.plugin.version>4.7.3.5</maven.sportbugs.plugin.version>
+		<maven.sportbugs.plugin.version>4.8.6.1</maven.sportbugs.plugin.version>
 	</properties>
 
 	<name>Repbot Application JAR</name>
