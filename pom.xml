@@ -13,19 +13,19 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<com.google.dagger.version>2.51.1</com.google.dagger.version>
+		<com.google.dagger.version>2.54</com.google.dagger.version>
 		<com.google.dagger.compiler.version>${com.google.dagger.version}</com.google.dagger.compiler.version>
-		<org.projectlombok.version>1.18.30</org.projectlombok.version>
-		<org.mariadb.jdbc.version>3.1.4</org.mariadb.jdbc.version>
-		<org.apache.logging.log4j.version>2.23.1</org.apache.logging.log4j.version>
+		<org.projectlombok.version>1.18.36</org.projectlombok.version>
+		<org.mariadb.jdbc.version>3.5.1</org.mariadb.jdbc.version>
+		<org.apache.logging.log4j.version>2.24.3</org.apache.logging.log4j.version>
 
-		<junit.jupiter.version>5.10.2</junit.jupiter.version>
-		<junit.platform.version>1.10.2</junit.platform.version>
+		<junit.jupiter.version>5.11.4</junit.jupiter.version>
+		<junit.platform.version>1.11.4</junit.platform.version>
 		<junit.platform.surefire.provider.version>${junit.platform.version}</junit.platform.surefire.provider.version>
 
 		<maven.compiler.plugin.version>3.13.0</maven.compiler.plugin.version>
-		<maven.jar.plugin.version>3.4.1</maven.jar.plugin.version>
-		<maven.surefire.plugin.version>3.2.5</maven.surefire.plugin.version>
+		<maven.jar.plugin.version>3.4.2</maven.jar.plugin.version>
+		<maven.surefire.plugin.version>3.5.2</maven.surefire.plugin.version>
 
 	</properties>
 
@@ -88,7 +88,6 @@
 			<artifactId>log4j-core</artifactId>
 			<version>${org.apache.logging.log4j.version}</version>
 		</dependency>
-		<!-- https://github.com/junit-team/junit5-samples/blob/master/junit5-maven-consumer/pom.xml -->
 
 		<!-- Junit5 -->
 		<dependency>
