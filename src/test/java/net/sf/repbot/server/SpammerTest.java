@@ -1,7 +1,5 @@
 package net.sf.repbot.server;
 
-import static org.junit.Assert.*;
-
 import java.time.Duration;
 import java.time.Instant;
 import static java.util.Comparator.*;
@@ -10,7 +8,8 @@ import java.util.Objects;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
 
 public class SpammerTest {
 
