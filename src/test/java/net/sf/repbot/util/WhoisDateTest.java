@@ -1,13 +1,11 @@
 package net.sf.repbot.util;
 
-import static org.junit.Assert.*;
 
 import java.time.Instant;
 import java.time.Year;
 
-import org.junit.Test;
-
-import net.sf.repbot.util.WhoisDateTimeParser;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 public class WhoisDateTest {
 

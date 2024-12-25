@@ -57,33 +57,20 @@ public class LastLoginInfo {
 	}
 
 	private static int getFibsMonth(String month) {
-		switch (month) {
-		case "Jan":
-			return 1;
-		case "Feb":
-			return 2;
-		case "Mar":
-			return 3;
-		case "Apr":
-			return 4;
-		case "May":
-			return 5;
-		case "Jun":
-			return 6;
-		case "Jul":
-			return 7;
-		case "Aug":
-			return 8;
-		case "Sep":
-			return 9;
-		case "Oct":
-			return 10;
-		case "Nov":
-			return 11;
-		case "Dec":
-			return 12;
-		default:
-			return 1;
-		}
+            return switch (month) {
+                case "Jan" -> 1;
+                case "Feb" -> 2;
+                case "Mar" -> 3;
+                case "Apr" -> 4;
+                case "May" -> 5;
+                case "Jun" -> 6;
+                case "Jul" -> 7;
+                case "Aug" -> 8;
+                case "Sep" -> 9;
+                case "Oct" -> 10;
+                case "Nov" -> 11;
+                case "Dec" -> 12;
+                default -> 1;
+            };
 	}
 }

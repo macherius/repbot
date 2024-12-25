@@ -1,10 +1,11 @@
 package net.sf.repbot;
 
 import javax.inject.Inject;
+
 import net.sf.repbot.command.NullCommand;
-import net.sf.repbot.dagger.RepbotComponent;
 import net.sf.repbot.dagger.DaggerRepbotComponent;
 import net.sf.repbot.dagger.RepBotModule;
+import net.sf.repbot.dagger.RepbotComponent;
 import net.sf.repbot.db.UserDB;
 import net.sf.repbot.db.UserDBException;
 import net.sf.repbot.preferences.Preferences;
@@ -12,7 +13,6 @@ import net.sf.repbot.preferences.PreferencesImpl;
 import net.sf.repbot.server.FibsListener;
 import net.sf.repbot.server.Monitor;
 import net.sf.repbot.services.CommandDispatcher;
-import net.sf.repbot.services.ConnectionActivity;
 import net.sf.repbot.services.Executor;
 import net.sf.repbot.services.Logger;
 import net.sf.repbot.services.MatchEventListener;
@@ -131,16 +131,20 @@ public class RepBot {
 	public static void main(String args[]) {
 		final Preferences uPrefs;
 		final String prefsPath;
-		if (args.length == 0) {
-			uPrefs = new PreferencesImpl();
-			prefsPath = null;
-		} else if (args.length == 1) {
-			uPrefs = new PreferencesImpl(args[0]);
-			prefsPath = args[0];
-		} else {
-			System.out.println("Usage: java " + RepBot.class.getCanonicalName() + " file.properties");
-			return;
-		}
+            switch (args.length) {
+                case 0 -> {
+                    uPrefs = new PreferencesImpl();
+                    prefsPath = null;
+                }
+                case 1 -> {
+                    uPrefs = new PreferencesImpl(args[0]);
+                    prefsPath = args[0];
+                }
+                default -> {
+                    System.out.println("Usage: java " + RepBot.class.getCanonicalName() + " file.properties");
+                    return;
+                }
+            }
 		if (uPrefs.getBoolean("net.sf.repbot.debug")) {
 			uPrefs.list(System.out);
 		}

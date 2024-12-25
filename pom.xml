@@ -7,36 +7,26 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.openfibs</groupId>
 	<artifactId>Repbot</artifactId>
-	<!-- <version>${net.sf.repbot.version.major}.${net.sf.repbot.version.minor}.${net.sf.repbot.version.patch}${net.sf.repbot.version.qualifier}</version> -->
 	<version>2.3.2-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<properties>
-		<net.sf.repbot.version.major>2</net.sf.repbot.version.major>
-		<net.sf.repbot.version.minor>3</net.sf.repbot.version.minor>
-		<net.sf.repbot.version.patch>2</net.sf.repbot.version.patch>
-		<net.sf.repbot.version.qualifier>-SNAPSHOT</net.sf.repbot.version.qualifier>
-		<net.sf.repbot.version.jre>1.8</net.sf.repbot.version.jre>
-
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<com.google.dagger.version>2.51.1</com.google.dagger.version>
+		<com.google.dagger.version>2.54</com.google.dagger.version>
 		<com.google.dagger.compiler.version>${com.google.dagger.version}</com.google.dagger.compiler.version>
-		<org.projectlombok.version>1.18.30</org.projectlombok.version>
-		<org.mariadb.jdbc.version>3.1.4</org.mariadb.jdbc.version>
-		<org.apache.logging.log4j.version>2.23.1</org.apache.logging.log4j.version>
+		<org.projectlombok.version>1.18.36</org.projectlombok.version>
+		<org.mariadb.jdbc.version>3.5.1</org.mariadb.jdbc.version>
+		<org.apache.logging.log4j.version>2.24.3</org.apache.logging.log4j.version>
 
-		<junit.jupiter.version>5.10.2</junit.jupiter.version>
-		<junit.vintage.version>${junit.jupiter.version}</junit.vintage.version>
-		<junit.platform.version>1.10.2</junit.platform.version>
+		<junit.jupiter.version>5.11.4</junit.jupiter.version>
+		<junit.platform.version>1.11.4</junit.platform.version>
 		<junit.platform.surefire.provider.version>${junit.platform.version}</junit.platform.surefire.provider.version>
 
 		<maven.compiler.plugin.version>3.13.0</maven.compiler.plugin.version>
-		<maven.jar.plugin.version>3.4.1</maven.jar.plugin.version>
-		<maven.surefire.plugin.version>3.2.5</maven.surefire.plugin.version>
-		<maven.pmd.plugin.version>3.21.0</maven.pmd.plugin.version>
-		<io.github.pmd.version>6.55.0</io.github.pmd.version>
-		<maven.sportbugs.plugin.version>4.7.3.5</maven.sportbugs.plugin.version>
+		<maven.jar.plugin.version>3.4.2</maven.jar.plugin.version>
+		<maven.surefire.plugin.version>3.5.2</maven.surefire.plugin.version>
+
 	</properties>
 
 	<name>Repbot Application JAR</name>
@@ -98,15 +88,7 @@
 			<artifactId>log4j-core</artifactId>
 			<version>${org.apache.logging.log4j.version}</version>
 		</dependency>
-		<!-- https://github.com/junit-team/junit5-samples/blob/master/junit5-maven-consumer/pom.xml -->
 
-		<!-- Only required to run tests in an IDE that bundles an older version -->
-		<dependency>
-			<groupId>org.junit.platform</groupId>
-			<artifactId>junit-platform-launcher</artifactId>
-			<version>${junit.platform.version}</version>
-			<scope>test</scope>
-		</dependency>
 		<!-- Junit5 -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
@@ -212,70 +194,5 @@
 				<filtering>true</filtering>
 			</resource>
 		</resources>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-pmd-plugin</artifactId>
-					<version>${maven.pmd.plugin.version}</version>
-					<dependencies>
-						<dependency>
-							<groupId>net.sourceforge.pmd</groupId>
-							<artifactId>pmd-core</artifactId>
-							<version>${io.github.pmd.version}</version>
-						</dependency>
-						<dependency>
-							<groupId>net.sourceforge.pmd</groupId>
-							<artifactId>pmd-java</artifactId>
-							<version>${io.github.pmd.version}</version>
-						</dependency>
-						<dependency>
-							<groupId>net.sourceforge.pmd</groupId>
-							<artifactId>pmd-javascript</artifactId>
-							<version>${io.github.pmd.version}</version>
-						</dependency>
-						<dependency>
-							<groupId>net.sourceforge.pmd</groupId>
-							<artifactId>pmd-jsp</artifactId>
-							<version>${io.github.pmd.version}</version>
-						</dependency>
-
-					</dependencies>
-				</plugin>
-			</plugins>
-		</pluginManagement>
 	</build>
-
-	<reporting>
-		<plugins>
-			<plugin>
-				<!-- https://github.com/pmd/pmd/blob/master/docs/pages/pmd/userdocs/tools/maven.md -->
-				<artifactId>maven-pmd-plugin</artifactId>
-				<version>${maven.pmd.plugin.version}</version>
-				<configuration>
-					<targetJdk>${net.sf.repbot.version.jre}</targetJdk>
-					<linkXref>true</linkXref>
-					<sourceEncoding>UTF-8</sourceEncoding>
-					<outputEncoding>UTF-8</outputEncoding>
-					<format>html</format>
-					<minimumTokens>100</minimumTokens>
-					<rulesets>
-						<!-- A rule set, that comes bundled with PMD -->
-						<!-- <ruleset>/category/java/bestpractices.xml</ruleset> -->
-					</rulesets>
-				</configuration>
-			</plugin>
-			<plugin>
-				<!-- https://spotbugs.github.io/ -->
-				<groupId>com.github.spotbugs</groupId>
-				<artifactId>spotbugs-maven-plugin</artifactId>
-				<version>${maven.sportbugs.plugin.version}</version>
-				<configuration>
-					<effort>Max</effort>
-					<threshold>Low</threshold>
-					<failOnError>false</failOnError>
-				</configuration>
-			</plugin>
-		</plugins>
-	</reporting>
 </project>

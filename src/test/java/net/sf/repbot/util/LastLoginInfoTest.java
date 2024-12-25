@@ -3,9 +3,8 @@ package net.sf.repbot.util;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
-import org.junit.*;
-
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 public class LastLoginInfoTest {
 

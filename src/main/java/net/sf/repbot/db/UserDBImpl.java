@@ -615,13 +615,10 @@ enum Opinion {
 	}
 
 	static public Opinion toEnum(String code) {
-		switch (code.charAt(0)) {
-		case 'V':
-			return VOUCHER;
-		case 'C':
-			return COMPLAINT;
-		default:
-			return null;
-		}
+            return switch (code.charAt(0)) {
+                case 'V' -> VOUCHER;
+                case 'C' -> COMPLAINT;
+                default -> null;
+            };
 	}
 }

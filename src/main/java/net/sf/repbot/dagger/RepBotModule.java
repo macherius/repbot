@@ -42,7 +42,7 @@ import net.sf.repbot.user.ZeroExpGarbageCollector;
 @Module
 public class RepBotModule {
 
-	private String prefsFilePath;
+	private final String prefsFilePath;
 
 	public RepBotModule(String prefsFilePath) {
 		this.prefsFilePath = prefsFilePath;
