@@ -20,16 +20,13 @@
 		<org.apache.logging.log4j.version>2.23.1</org.apache.logging.log4j.version>
 
 		<junit.jupiter.version>5.10.2</junit.jupiter.version>
-		<junit.vintage.version>${junit.jupiter.version}</junit.vintage.version>
 		<junit.platform.version>1.10.2</junit.platform.version>
 		<junit.platform.surefire.provider.version>${junit.platform.version}</junit.platform.surefire.provider.version>
 
 		<maven.compiler.plugin.version>3.13.0</maven.compiler.plugin.version>
 		<maven.jar.plugin.version>3.4.1</maven.jar.plugin.version>
 		<maven.surefire.plugin.version>3.2.5</maven.surefire.plugin.version>
-		<maven.pmd.plugin.version>3.21.0</maven.pmd.plugin.version>
-		<io.github.pmd.version>6.55.0</io.github.pmd.version>
-		<maven.sportbugs.plugin.version>4.7.3.5</maven.sportbugs.plugin.version>
+
 	</properties>
 
 	<name>Repbot Application JAR</name>
@@ -199,37 +196,4 @@
 			</resource>
 		</resources>
 	</build>
-
-	<reporting>
-		<plugins>
-			<plugin>
-				<!-- https://github.com/pmd/pmd/blob/master/docs/pages/pmd/userdocs/tools/maven.md -->
-				<artifactId>maven-pmd-plugin</artifactId>
-				<version>${maven.pmd.plugin.version}</version>
-				<configuration>
-					<targetJdk>${net.sf.repbot.version.jre}</targetJdk>
-					<linkXref>true</linkXref>
-					<sourceEncoding>UTF-8</sourceEncoding>
-					<outputEncoding>UTF-8</outputEncoding>
-					<format>html</format>
-					<minimumTokens>100</minimumTokens>
-					<rulesets>
-						<!-- A rule set, that comes bundled with PMD -->
-						<!-- <ruleset>/category/java/bestpractices.xml</ruleset> -->
-					</rulesets>
-				</configuration>
-			</plugin>
-			<plugin>
-				<!-- https://spotbugs.github.io/ -->
-				<groupId>com.github.spotbugs</groupId>
-				<artifactId>spotbugs-maven-plugin</artifactId>
-				<version>${maven.sportbugs.plugin.version}</version>
-				<configuration>
-					<effort>Max</effort>
-					<threshold>Low</threshold>
-					<failOnError>false</failOnError>
-				</configuration>
-			</plugin>
-		</plugins>
-	</reporting>
 </project>
