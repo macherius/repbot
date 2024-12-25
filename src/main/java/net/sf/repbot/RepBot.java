@@ -131,16 +131,20 @@ public class RepBot {
 	public static void main(String args[]) {
 		final Preferences uPrefs;
 		final String prefsPath;
-		if (args.length == 0) {
-			uPrefs = new PreferencesImpl();
-			prefsPath = null;
-		} else if (args.length == 1) {
-			uPrefs = new PreferencesImpl(args[0]);
-			prefsPath = args[0];
-		} else {
-			System.out.println("Usage: java " + RepBot.class.getCanonicalName() + " file.properties");
-			return;
-		}
+            switch (args.length) {
+                case 0 -> {
+                    uPrefs = new PreferencesImpl();
+                    prefsPath = null;
+                }
+                case 1 -> {
+                    uPrefs = new PreferencesImpl(args[0]);
+                    prefsPath = args[0];
+                }
+                default -> {
+                    System.out.println("Usage: java " + RepBot.class.getCanonicalName() + " file.properties");
+                    return;
+                }
+            }
 		if (uPrefs.getBoolean("net.sf.repbot.debug")) {
 			uPrefs.list(System.out);
 		}

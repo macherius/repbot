@@ -140,7 +140,7 @@ public class FibsListener implements Runnable {
 				logger.logTimestampedLine("FibsListener.run:processLoop enter");
 				processLoop();
 				logger.logTimestampedLine("FibsListener.run:processLoop exit");
-			} catch (Exception e) {
+			} catch (IOException e) {
 				e.printStackTrace();
 				logger.logTimestampedLine("FibsListener.run:processLoop Exception");
 				reconnect();
@@ -197,8 +197,8 @@ public class FibsListener implements Runnable {
 
 	public class ListenerMultiplexer implements LineListener, ConnectListener {
 
-		private Collection<LineListener> lineListeners = new HashSet<>();
-		private Collection<ConnectListener> connectListeners = new HashSet<>();
+		private final Collection<LineListener> lineListeners = new HashSet<>();
+		private final Collection<ConnectListener> connectListeners = new HashSet<>();
 
 		public void add(LineListener lineListener) {
 			if (lineListeners.contains(lineListener)) {
