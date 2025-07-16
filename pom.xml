@@ -19,7 +19,7 @@
 		<org.mariadb.jdbc.version>3.5.3</org.mariadb.jdbc.version>
 		<org.apache.logging.log4j.version>2.24.3</org.apache.logging.log4j.version>
 
-		<junit.jupiter.version>5.12.0</junit.jupiter.version>
+		<junit.jupiter.version>5.13.3</junit.jupiter.version>
 		<junit.platform.version>1.11.4</junit.platform.version>
 		<junit.platform.surefire.provider.version>${junit.platform.version}</junit.platform.surefire.provider.version>
 
