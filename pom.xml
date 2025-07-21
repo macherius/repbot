@@ -17,7 +17,7 @@
 		<com.google.dagger.compiler.version>${com.google.dagger.version}</com.google.dagger.compiler.version>
 		<org.projectlombok.version>1.18.38</org.projectlombok.version>
 		<org.mariadb.jdbc.version>3.5.3</org.mariadb.jdbc.version>
-		<org.apache.logging.log4j.version>2.24.3</org.apache.logging.log4j.version>
+		<org.apache.logging.log4j.version>2.25.1</org.apache.logging.log4j.version>
 
 		<junit.jupiter.version>5.13.3</junit.jupiter.version>
 		<junit.platform.version>1.11.4</junit.platform.version>
