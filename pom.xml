@@ -13,19 +13,19 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<com.google.dagger.version>2.56.1</com.google.dagger.version>
+		<com.google.dagger.version>2.57</com.google.dagger.version>
 		<com.google.dagger.compiler.version>${com.google.dagger.version}</com.google.dagger.compiler.version>
-		<org.projectlombok.version>1.18.36</org.projectlombok.version>
-		<org.mariadb.jdbc.version>3.5.3</org.mariadb.jdbc.version>
-		<org.apache.logging.log4j.version>2.24.3</org.apache.logging.log4j.version>
+		<org.projectlombok.version>1.18.38</org.projectlombok.version>
+		<org.mariadb.jdbc.version>3.5.5</org.mariadb.jdbc.version>
+		<org.apache.logging.log4j.version>2.25.1</org.apache.logging.log4j.version>
 
-		<junit.jupiter.version>5.12.0</junit.jupiter.version>
+		<junit.jupiter.version>5.13.4</junit.jupiter.version>
 		<junit.platform.version>1.11.4</junit.platform.version>
 		<junit.platform.surefire.provider.version>${junit.platform.version}</junit.platform.surefire.provider.version>
 
 		<maven.compiler.plugin.version>3.14.0</maven.compiler.plugin.version>
 		<maven.jar.plugin.version>3.4.2</maven.jar.plugin.version>
-		<maven.surefire.plugin.version>3.5.2</maven.surefire.plugin.version>
+		<maven.surefire.plugin.version>3.5.3</maven.surefire.plugin.version>
 
 	</properties>
 
